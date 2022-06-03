@@ -4,15 +4,33 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "npx hardhat node",
+    "run": "npx hardhat run scripts/sample-script.js --network localhost",
+    "builder": "node scripts/sample-script.js"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.1.2",
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "framer-motion": "^6.3.10",
     "next": "12.1.4",
     "react": "18.0.0",
     "react-dom": "18.0.0"
   },
   "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.5",
+    "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "autoprefixer": "^10.4.7",
+    "chai": "^4.3.6",
+    "dotenv": "^16.0.0",
     "eslint": "8.12.0",
-    "eslint-config-next": "12.1.4"
+    "eslint-config-next": "12.1.4",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.5.4",
+    "hardhat": "^2.9.0",
+    "postcss": "^8.4.14",
+    "sass": "^1.52.2",
+    "tailwindcss": "^3.0.24"
   }
 }
