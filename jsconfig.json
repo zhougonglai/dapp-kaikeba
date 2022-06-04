@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@com/*": ["components/*"],
+      "@style/*": ["styles/*"],
+      "@contact/*": ["artifact/contracts/*"],
+    }
+  }
+}
