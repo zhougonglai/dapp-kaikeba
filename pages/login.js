@@ -13,7 +13,7 @@ export default function LoginPage() {
     if(isActive) {
       router.replace('/account')
     }
-  },[isActive])
+  },[isActive, router])
 
   const connect = async () => {
     const data = await metaMask.activate()
