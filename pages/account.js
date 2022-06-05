@@ -10,8 +10,12 @@ export default function account() {
   const provider = useProvider();
 
   useEffect(() => {
-    console.log(account);
-  }, [account])
+    if(accounts?.length){
+// const avatar = await provider.getAvatar(account)
+      // console.log(avatar)
+      console.log(provider)
+    }
+  }, [accounts])
 
   return (
     <div>

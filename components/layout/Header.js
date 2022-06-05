@@ -4,7 +4,7 @@ import { Container, Heading, Button, Flex, useColorModeValue, LinkOverlay, LinkB
 import { metaMask, hooks } from '../../hooks/metamask';
 import Status from './Status';
 
-const { useChainId, useAccount, useProvider, useENSNames, useAccounts, useError, useIsActive, useIsActivating } = hooks
+const { useChainId, useAccount, useProvider, useAccounts, useError, useIsActive, useIsActivating } = hooks
 
 export default function Header() {
   const chainId = useChainId()
@@ -15,7 +15,6 @@ export default function Header() {
   const isActive = useIsActive()
 
   const provider = useProvider()
-  const ENSNames = useENSNames(provider)
 
   useEffect(() => {
     metaMask.connectEagerly()
@@ -37,6 +36,10 @@ export default function Header() {
     }
   }
 
+  const logout = () => {
+    console.log(provider)
+  }
+
   return (
     <Flex as="header" bg={useColorModeValue('gray.100', 'gray.900')} p={4} alignItems="center">
       <Container maxW="container.xl" display="flex" alignItems='center'>
@@ -49,8 +52,11 @@ export default function Header() {
         </LinkBox>
         <Spacer />
         <Status isActivating={isActivating} error={error} isActive={isActive} />
-        <Button ml="2">
-          {navigator(<ion-icon name="wallet"></ion-icon>)}
+        <Button mx="2">
+          {navigator(<ion-icon name="wallet" role="img" ariaLabel="hidden"></ion-icon>)}
+        </Button>
+        <Button color='red.500' onClick={logout}>
+          <ion-icon name="log-out" role="img" ariaLabel="hidden"></ion-icon>
         </Button>
       </Container>
     </Flex>

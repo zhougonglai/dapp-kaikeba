@@ -1,13 +1,45 @@
+import { ethers } from 'ethers'
+import detectEthereumProvider from '@metamask/detect-provider';
 import Head from 'next/head'
-import { useEffect } from 'react'
-
-function getStaticProps() {
-  console.log('getStaticProps', process.env)
-}
+import { useEffect, useState } from 'react'
+import { Button, VStack, Box, Container, Heading, NumberInput, NumberInputField } from '@chakra-ui/react'
 
 
 export default function Home() {
-  useEffect(getStaticProps)
+
+  const [ currentAccount, setCurrentAccount ] = useState();
+  const [ accounts, setAccounts ] = useState();
+  const [ balance, setBalance ] = useState();
+
+  useEffect(() => {
+    if(currentAccount) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      // console.log('provider', provider)
+      provider.getBalance(currentAccount).then((balance) => {
+        setBalance(ethers.utils.formatEther(balance))
+      })
+    }
+
+  }, [currentAccount])
+
+  const connect = async () => {
+    const provider = await detectEthereumProvider();
+    const accounts = await provider.request({ method: 'eth_requestAccounts' }).catch((err) => {
+      console.log('err', err)
+    });
+    // console.log(accounts, provider)
+    if(accounts.length) {
+      setAccounts(accounts);
+      setCurrentAccount(accounts[0]);
+    } else {
+      disConnect();
+    }
+  }
+
+  const disConnect = () => {
+    setCurrentAccount(undefined)
+    setBalance(undefined)
+  }
 
   return (
     <>
@@ -17,12 +49,24 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section>
-        There are many benefits to a joint design and development system. Not only
-        does it bring benefits to the design team, but it also brings benefits to
-        engineering teams. It makes sure that our experiences have a consistent look
-        and feel, not just in our design specs, but in production
-      </section>
+        <VStack columnGap={10}>
+          <Container maxW="container.xl" py={5} px={10} border="1px" shadow="base" alignItems={"center"} rounded={'base'} borderColor="gray.300"  _hover={{shadow: 'lg'}}>
+            {
+              currentAccount
+              ? <Button onClick={disConnect}> {currentAccount}(Ξ{balance}) </Button>
+              : <Button onClick={connect}> Connect Wallet </Button>
+            }
+          </Container>
 
+          <Container maxW="container.xl" py={5} px={10} border="1px" rounded={'base'} borderColor="gray.300" _hover={{shadow: 'lg'}}>
+            <Heading fontSize="xl">合约转账</Heading>
+            <NumberInput my={10} defaultValue={15} min={0}>
+              <NumberInputField type="number" />
+            </NumberInput>
+          </Container>
+        </VStack>
+
+      </section>
     </>
   )
 }
