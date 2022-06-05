@@ -5,7 +5,7 @@ import { hooks, metaMask } from '../hooks/metamask'
 
 const { useIsActive } = hooks;
 
-export default function login() {
+export default function LoginPage() {
   const router = useRouter()
   const isActive = useIsActive();
 

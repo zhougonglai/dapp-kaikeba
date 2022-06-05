@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { Button, VStack, Box, Container, Heading, NumberInput, NumberInputField } from '@chakra-ui/react'
 
 
-export default function Home() {
+export default function HomePage() {
 
   const [ currentAccount, setCurrentAccount ] = useState();
   const [ accounts, setAccounts ] = useState();

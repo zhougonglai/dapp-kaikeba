@@ -4,15 +4,13 @@ import { hooks, metaMask } from '../hooks/metamask';
 
 const { useAccount, useAccounts, useProvider } = hooks;
 
-export default function account() {
+export default function AccountPage() {
   const account = useAccount();
   const accounts = useAccounts();
   const provider = useProvider();
 
   useEffect(() => {
     if(accounts?.length){
-// const avatar = await provider.getAvatar(account)
-      // console.log(avatar)
       console.log(provider)
     }
   }, [accounts])
