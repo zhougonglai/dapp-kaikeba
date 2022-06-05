@@ -1,4 +1,4 @@
-export default ({ isActivating, error, isActive }) => {
+export default function Status({ isActivating, error, isActive }) {
   return (
     <div>
       {error ? (

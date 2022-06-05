@@ -2,7 +2,7 @@ import { Container } from '@chakra-ui/react'
 import Header from "./Header";
 
 
-export default function (props) {
+export default function Layout(props) {
   return <>
     <Header />
     <Container maxW="container.xl" py='8'>
