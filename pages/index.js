@@ -3,13 +3,17 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { Button, VStack, Box, Container, Heading, NumberInput, NumberInputField } from '@chakra-ui/react'
+import ERC20Read from '../components/contract/ERC20Read';
+import ERC20Transfer from '../components/contract/ERC20Transfer';
 
+const ERC20_contract = '0x0165878A594ca255338adfa4d48449f69242Eb8F';
 
 export default function HomePage() {
 
   const [ currentAccount, setCurrentAccount ] = useState();
   const [ accounts, setAccounts ] = useState();
   const [ balance, setBalance ] = useState();
+  const [ connect, setConnect ] = useState();
 
   useEffect(() => {
     if(currentAccount) {
@@ -19,14 +23,31 @@ export default function HomePage() {
         setBalance(ethers.utils.formatEther(balance))
       })
     }
-
   }, [currentAccount])
 
-  const connect = async () => {
+  useEffect(() => {
+    if(window.ethereum) {
+      const Web3Provider = new ethers.providers.Web3Provider(window.ethereum);
+      console.log(Web3Provider)
+
+      Web3Provider.provider.request({ method: 'eth_accounts' })
+      .then(accountsChanged)
+      .catch(err => {
+        console.log('err', err)
+      })
+      setConnect(Web3Provider.provider.isConnected())
+      Web3Provider.provider.on('message', onMessage)
+      Web3Provider.provider.on('connect', onConnectChange)
+    }
+  }, [])
+
+  const connector = async () => {
     const provider = await detectEthereumProvider();
     const accounts = await provider.request({ method: 'eth_requestAccounts' }).catch((err) => {
       console.log('err', err)
     });
+
+    provider.on('accountsChanged', accountsChanged)
     // console.log(accounts, provider)
     if(accounts.length) {
       setAccounts(accounts);
@@ -34,6 +55,23 @@ export default function HomePage() {
     } else {
       disConnect();
     }
+  }
+
+  const accountsChanged = async (accounts) => {
+    if(accounts.length) {
+      setAccounts(accounts);
+      setCurrentAccount(accounts[0]);
+    } else {
+      disConnect()
+    }
+  }
+
+  const onConnectChange = async (e) => {
+    console.log('onConnectChange', e)
+  }
+
+  const onMessage = (e) => {
+    console.log('onMessage', e)
   }
 
   const disConnect = () => {
@@ -54,15 +92,22 @@ export default function HomePage() {
             {
               currentAccount
               ? <Button onClick={disConnect}> {currentAccount}(Ξ{balance}) </Button>
-              : <Button onClick={connect}> Connect Wallet </Button>
+              : <Button onClick={connector}> Connect Wallet </Button>
             }
+          </Container>
+
+
+          <Container maxW="container.xl" py={5} px={10} border="1px" rounded={'base'} borderColor="gray.300" _hover={{shadow: 'lg'}}>
+            <Heading fontSize="xl">ERC20</Heading>
+            { currentAccount ? <ERC20Read contract={ERC20_contract} account={currentAccount} /> : null }
           </Container>
 
           <Container maxW="container.xl" py={5} px={10} border="1px" rounded={'base'} borderColor="gray.300" _hover={{shadow: 'lg'}}>
             <Heading fontSize="xl">合约转账</Heading>
-            <NumberInput my={10} defaultValue={15} min={0}>
+            {/* <NumberInput my={10} defaultValue={15} min={0}>
               <NumberInputField type="number" />
-            </NumberInput>
+            </NumberInput> */}
+            { currentAccount ? <ERC20Transfer contract={ERC20_contract} account={currentAccount} /> : null }
           </Container>
         </VStack>
 

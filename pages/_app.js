@@ -3,6 +3,8 @@ import Script from 'next/script';
 import Layout from '../components/layout'
 import '../styles/globals.css'
 
+// 0x5FbDB2315678afecb367f032d93F642f64180aa3
+
 function MyApp({ Component, pageProps }) {
   return (
   <ChakraProvider>
